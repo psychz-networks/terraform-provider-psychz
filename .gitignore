@@ -1,0 +1,9 @@
+terraform-provider-psychz
+examples/order_details/.terraform.lock.hcl
+examples/order_details/tfplan
+examples/order_details/.terraform
+examples/order_details/terraform.tfstate
+examples/order_express/.terraform.lock.hcl
+examples/order_express/tfplan
+examples/order_express/.terraform
+examples/order_express/terraform.tfstate
