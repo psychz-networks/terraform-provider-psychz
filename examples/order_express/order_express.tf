@@ -80,10 +80,4 @@ output "server_order_express_status" {
   value = psychz_order_express.express_server
 }
 
-data "psychz_order_detail" "server" {
-  order_id = psychz_order_express.express_server.id
-}
 
-output "server_order_status" {
-  value = data.psychz_order_detail.server
-}

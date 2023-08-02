@@ -7,6 +7,7 @@ Psychz Provider examples are grouped into following directories:
 
 * [order_details](order_details/) - For calling order details API
 * [order_express](order_express/) - For calling order express API
+* [service_details](service_details/) - For calling service details API
 
 
 ## Using examples

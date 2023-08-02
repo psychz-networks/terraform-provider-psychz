@@ -31,7 +31,9 @@ func Provider() *schema.Provider {
 			"psychz_order_express": resources.ResourceOrderExpress(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
-			"psychz_order_detail": data_sources.DataPsychzOrderDetail(),
+			"psychz_order_detail":   data_sources.DataPsychzOrderDetail(),
+			"psychz_order_plans":    data_sources.DataPsychzOrderPlans(),
+			"psychz_service_detail": data_sources.DataPsychzServiceDetail(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}

@@ -4,5 +4,5 @@ data "psychz_order_detail" "server" {
 }
 
 output "server_order_status" {
-  value = data.psychz_order_detail.server
+  value = data.psychz_order_detail.server.order_info
 }
