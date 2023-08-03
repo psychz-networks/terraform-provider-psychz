@@ -101,62 +101,6 @@ func (c *Client) CreateOrderExpress(ctx context.Context, data map[string]interfa
 	return &orderExpressResponse, nil
 }
 
-type ServiceDetail struct {
-	Status bool             `json:"status"`
-	Data   ServiceDataInner `json:"data"`
-}
-
-type ServiceDataInner struct {
-	ServiceID        string                  `json:"service_id"`
-	DesServ          string                  `json:"desserv"`
-	Price            string                  `json:"price"`
-	Period           string                  `json:"period"`
-	PeriodCode       string                  `json:"period_code"`
-	Discount         string                  `json:"discount"`
-	Cost             string                  `json:"cost"`
-	ParentPack       string                  `json:"parentpack"`
-	Active           string                  `json:"active"`
-	AutoBill         string                  `json:"auto_bill"`
-	Quantity         string                  `json:"quantity"`
-	Billed           string                  `json:"billed"`
-	OrderID          string                  `json:"order_id"`
-	ServiceStart     string                  `json:"service_start"`
-	ServiceCreated   string                  `json:"service_created"`
-	ServiceLastRenew string                  `json:"service_last_renew"`
-	ServiceRenewDate string                  `json:"service_renew_date"`
-	IPAssignments    map[string]IPAssignment `json:"-"`
-	IPAssignmentsArr []IPAssignment          `json:"ip_assignments"`
-}
-
-type IPAssignment struct {
-	Address           string `json:"address"`
-	AssignDescription string `json:"assign_description"`
-}
-
-func (s *ServiceDataInner) UnmarshalJSON(data []byte) error {
-	type TempServiceDataInner ServiceDataInner
-	temp := struct {
-		*TempServiceDataInner
-		IPAssignments json.RawMessage `json:"ip_assignments"`
-	}{
-		TempServiceDataInner: (*TempServiceDataInner)(s),
-	}
-
-	err := json.Unmarshal(data, &temp)
-	if err != nil {
-		return err
-	}
-
-	if len(temp.IPAssignments) > 0 && temp.IPAssignments[0] == '[' {
-		err = json.Unmarshal(temp.IPAssignments, &s.IPAssignmentsArr)
-	} else {
-		s.IPAssignments = make(map[string]IPAssignment)
-		err = json.Unmarshal(temp.IPAssignments, &s.IPAssignments)
-	}
-
-	return err
-}
-
 type OrderDetails struct {
 	Status bool           `json:"status"`
 	Data   OrderDataInner `json:"data"`
@@ -266,6 +210,62 @@ func (c *Client) GetOrderDetail(ctx context.Context, orderID int) (OrderDetails,
 	return orderInfo, nil
 }
 
+type ServiceDetail struct {
+	Status bool             `json:"status"`
+	Data   ServiceDataInner `json:"data"`
+}
+
+type ServiceDataInner struct {
+	ServiceID        string                  `json:"service_id"`
+	DesServ          string                  `json:"desserv"`
+	Price            string                  `json:"price"`
+	Period           string                  `json:"period"`
+	PeriodCode       string                  `json:"period_code"`
+	Discount         string                  `json:"discount"`
+	Cost             string                  `json:"cost"`
+	ParentPack       string                  `json:"parentpack"`
+	Active           string                  `json:"active"`
+	AutoBill         string                  `json:"auto_bill"`
+	Quantity         string                  `json:"quantity"`
+	Billed           string                  `json:"billed"`
+	OrderID          string                  `json:"order_id"`
+	ServiceStart     string                  `json:"service_start"`
+	ServiceCreated   string                  `json:"service_created"`
+	ServiceLastRenew string                  `json:"service_last_renew"`
+	ServiceRenewDate string                  `json:"service_renew_date"`
+	IPAssignments    map[string]IPAssignment `json:"-"`
+	IPAssignmentsArr []IPAssignment          `json:"ip_assignments"`
+}
+
+type IPAssignment struct {
+	Address           string `json:"address"`
+	AssignDescription string `json:"assign_description"`
+}
+
+func (s *ServiceDataInner) UnmarshalJSON(data []byte) error {
+	type TempServiceDataInner ServiceDataInner
+	temp := struct {
+		*TempServiceDataInner
+		IPAssignments json.RawMessage `json:"ip_assignments"`
+	}{
+		TempServiceDataInner: (*TempServiceDataInner)(s),
+	}
+
+	err := json.Unmarshal(data, &temp)
+	if err != nil {
+		return err
+	}
+
+	if len(temp.IPAssignments) > 0 && temp.IPAssignments[0] == '[' {
+		err = json.Unmarshal(temp.IPAssignments, &s.IPAssignmentsArr)
+	} else {
+		s.IPAssignments = make(map[string]IPAssignment)
+		err = json.Unmarshal(temp.IPAssignments, &s.IPAssignments)
+	}
+
+	return err
+}
+
 func (c *Client) GetServiceDetail(ctx context.Context, orderID int) ([]IPAssignment, error) {
 	req, err := http.NewRequestWithContext(ctx, "GET", fmt.Sprintf("%s/services_details?service_id=%d&access_token=%s&access_username=%s&ip_assignments=1", baseURL, orderID, c.AccessToken, c.AccessUsername), nil)
 	if err != nil {
@@ -281,8 +281,7 @@ func (c *Client) GetServiceDetail(ctx context.Context, orderID int) ([]IPAssignm
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		bodyBytes, _ := ioutil.ReadAll(resp.Body)
-		return nil, fmt.Errorf("Psychz Networks API error: %s", string(bodyBytes))
+		return []IPAssignment{}, nil
 	}
 
 	var serviceDetail ServiceDetail
