@@ -129,7 +129,6 @@ type ServiceDataInner struct {
 }
 
 type IPAssignment struct {
-	AssignID          string `json:"assign_id"`
 	Address           string `json:"address"`
 	AssignDescription string `json:"assign_description"`
 }
