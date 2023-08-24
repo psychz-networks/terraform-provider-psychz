@@ -61,8 +61,8 @@ func dataSourceOrderPlansRead(ctx context.Context, d *schema.ResourceData, m int
 
 	params := make(map[string]string)
 
-	if orderID, ok := d.GetOk("order_id"); ok {
-		params["order_id"] = orderID.(string)
+	if planID, ok := d.GetOk("plan_id"); ok {
+		params["plan_id"] = planID.(string)
 	}
 
 	if categoryID, ok := d.GetOk("category_id"); ok {
