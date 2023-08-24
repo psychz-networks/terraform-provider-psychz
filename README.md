@@ -20,7 +20,7 @@ This repository is [Maintained](https://www.psychz.net/) meaning that this softw
 The Psychz provider will be installed automatically from official Terraform
 registry on `terraform init`.
 
-See the [Psychz Provider documentation](https://www.psychz.net/)
+See the [Psychz Provider documentation](https://www.psychz.net/client/kb/en/deploy-psychz-dedicated-server-using-terraform-provider.html)
 to get started using the Psychz provider.
 
 ## Documentation
