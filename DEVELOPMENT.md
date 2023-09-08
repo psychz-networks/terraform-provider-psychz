@@ -45,7 +45,7 @@ Run `terraform version` command to determine version of your Terraform installat
 
 ### Terraform 1.4.6 and newer
 
-1. Create `psychz.net/psychz/psychz/1.0.0/linux_amd64` directories
+1. Create `psychz.net/psychz/psychz/1.0.1/linux_amd64` directories
 under:
 
 
@@ -53,13 +53,13 @@ under:
    *Note:* adjust `linux_amd64` from above structure to match your *os_arch*
 
    ```sh
-   mkdir -p ~/.terraform.d/plugins/psychz.net/psychz/psychz/1.0.0/linux_amd64
+   mkdir -p ~/.terraform.d/plugins/psychz.net/psychz/psychz/1.0.1/linux_amd64
    ```
 
 2. Copy Psychz provider **binary file** there.
 
    ```sh
-   cp terraform-provider-psychz ~/.terraform.d/plugins/psychz.net/psychz/psychz/1.0.0/linux_amd64
+   cp terraform-provider-psychz ~/.terraform.d/plugins/psychz.net/psychz/psychz/1.0.1/linux_amd64
    ```
 
 3. In every Terraform template directory that uses Psychz provider, ship below
@@ -70,7 +70,7 @@ under:
      required_providers {
        psychz = {
          source = "psychz.net/psychz/psychz"
-         version = "1.0.0"
+         version = "1.0.1"
        }
      }
    }
