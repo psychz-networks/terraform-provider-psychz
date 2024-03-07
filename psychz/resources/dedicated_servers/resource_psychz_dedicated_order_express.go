@@ -137,28 +137,33 @@ func resourceOrderExpressCreate(ctx context.Context, d *schema.ResourceData, m i
 	password := d.Get("password").(string)
 	private_key := d.Get("private_key").(string)
 
-	if authMethod == 1 && password == "" {
-		return diag.Errorf("Password is required for this auth method")
-	} else if authMethod == 2 && private_key == "" {
-		return diag.Errorf("Private key is required for this auth method")
-	}
+    if authMethod == 1 {
+        if password == "" {
+            return diag.Errorf("Password is required for this auth method")
+        }
+        private_key = "" 
+    } else if authMethod == 2 {
+        if private_key == "" {
+            return diag.Errorf("Private key is required for this auth method")
+        }
+        password = "" 
+    }
 
-	// Prepare the order details
-	orderData := map[string]interface{}{
-		"plan_id":                 d.Get("plan_id").(int),
-		"order_quantity":          d.Get("order_quantity").(int),
-		"payment_mode":            d.Get("payment_mode").(int),
-		"os_cat":                  d.Get("os_cat").(int),
-		"os_id":                   d.Get("os_id").(int),
-		"disk_partition_id":       d.Get("disk_partition_id").(int),
-		"auth_method":             d.Get("auth_method").(int),
-		"software_raid":           d.Get("software_raid").(int),
-		"hostname":                d.Get("hostname").(string),
-		"password":                d.Get("password").(string),
-		"private_key":             d.Get("private_key").(string),
-		"partner_id":              d.Get("partner_id").(int),
-		"enforce_password_change": d.Get("enforce_password_change").(int),
-	}
+    orderData := map[string]interface{}{
+        "plan_id":                 d.Get("plan_id").(int),
+        "order_quantity":          d.Get("order_quantity").(int),
+        "payment_mode":            d.Get("payment_mode").(int),
+        "os_cat":                  d.Get("os_cat").(int),
+        "os_id":                   d.Get("os_id").(int),
+        "disk_partition_id":       d.Get("disk_partition_id").(int),
+        "auth_method":             authMethod,
+        "software_raid":           d.Get("software_raid").(int),
+        "hostname":                d.Get("hostname").(string),
+        "password":                password,
+        "private_key":             private_key,
+        "partner_id":              d.Get("partner_id").(int),
+        "enforce_password_change": d.Get("enforce_password_change").(int),
+    }
 
 	// Make the API call
 	resp, err := client.CreateOrderExpress(ctx, orderData)
